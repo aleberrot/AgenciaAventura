@@ -1,12 +1,12 @@
 from DTO.UsuarioDTO import UsuarioDTO
-from  datetime import datime
+from datetime import datetime
 
 class ReservaDTO:
 	"""docstring for Reserva"""
-	def __init__(self, id: int, usuario: UsuarioDTO, paquete: PaqueteTuristico, fecha_reserva: datetime, estado: str ):
-		self.id = id
-		self.usuario = usuario
-		self.paquete = paquete
+	def __init__(self, id_reserva: int, id_usuario: UsuarioDTO, id_paquete: PaqueteTuristico, fecha_reserva: datetime, estado: str ):
+		self.id_reserva = id_reserva
+		self.id_usuario = id_usuario
+		self.id_paquete = id_paquete
 		self.fecha_reserva = fecha_reserva
 		self.estado = estado
 

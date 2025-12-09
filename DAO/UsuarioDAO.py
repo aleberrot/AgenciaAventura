@@ -3,7 +3,9 @@ from DTO.UsuarioDTO import UsuarioDTO
 from typing import List
 
 class UsuarioDAO:
-	"""docstring for UsuarioDAO"""
+	"""
+	docstring for UsuarioDAO
+ 	"""
 	
 	def crear(self, usuario: UsuarioDTO) -> int:
 		conn = Conexion.obtener_conexion()
@@ -35,7 +37,7 @@ class UsuarioDAO:
 
 				usuario_db = cursor.fetchone()
 
-				if usuario:
+				if usuario_db:
 					return UsuarioDTO(**usuario_db)
 				else:
 					raise Exception(f"Usuario con el ID {id_usuario} no ha sido encontrado")
@@ -57,7 +59,7 @@ class UsuarioDAO:
 
 				usuario_db = cursor.fetchone()
 
-				if usuario:
+				if usuario_db:
 					return UsuarioDTO(**usuario_db)
 				else: 
 					raise Exception(f"Usuario con el email {email} no ha sido encontrado")
