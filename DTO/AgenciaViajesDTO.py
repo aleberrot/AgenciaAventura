@@ -1,5 +1,5 @@
 from DTO.DestinoDTO import DestinoDTO
-from DTO.PaqueteTuristicoDTO import PaqueteTuristicoDTO
+from DTO.PaqueteDestinoDTO import PaqueteTuristicoDTO
 from DTO.ReservaDTO import ReservaDTO
 from typing import List
 

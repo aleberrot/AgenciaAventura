@@ -1,5 +1,6 @@
 from typing import List
 
+
 class DestinoDTO:
 	"""docstring for Destino"""
 	def __init__(self, id: int, nombre: str, descripcion: str, actividades: List[str], costo: float):
@@ -18,6 +19,6 @@ class DestinoDTO:
 	def eliminar() -> bool:
 		...
 
-	def obtener_todos() -> List[DestinoDTO]:
+	def obtener_todos() -> List['DestinoDTO']:
 		... 
 		
