@@ -1,61 +1,79 @@
-from DB.conexion import Conexion
 from DTO.ReservaDTO import ReservaDTO
+from typing import List, Optional
+from DAO.BaseDAO import BaseDAO
 
+class ReservaDAO(BaseDAO):
+    """
+    DAO for Reserva entity, managing the 'reservas' table.
+    """
+    def __init__(self):
+        super().__init__(ReservaDTO)
 
-# TODO: Implementar BaseDAO para heredar
-class ReservaDAO:
-    """docstring for ReservaDAO"""
-    
     def crear(self, reserva: ReservaDTO) -> int:
-        conn = Conexion.obtener_conexion()
+        """
+        Create a new reserva record.
+        """
+        # Excluimos fecha_reserva (usa DEFAULT CURRENT_TIMESTAMP)
+        sql = "INSERT INTO reservas (id_usuario, id_paquete, estado) VALUES (%s, %s, %s);"
+        values = (reserva.id_usuario, reserva.id_paquete, reserva.estado)
         
-        try:    
-            with conn.cursor() as cursor:
-                sql = "INSERT INTO reservas(id_reserva, id_usuario, id_paquete, fecha_reserva, estado) VALUES (%s, %s, %s, %s, %s);"
-                values = (reserva.id_reserva, reserva.id_usuario, reserva.id_paquete, reserva.fecha_reserva, reserva.estado)
-                
-                cursor.execute(sql, values)
-                return cursor.lastrowid
-        except Exception as e:
-            print(f"Ha ocurrido un error: {e}")
-            conn.rollback()
-            return 0
-        
-    def obtener_por_id(self, id_reserva: int) -> ReservaDTO:
-        conn = Conexion.obtener_conexion()
-            
-        try:
-            with conn.cursor() as cursor:
-                sql = "SELECT * FROM reservas WHERE id_reserva = %s;"
-                values = (id_reserva,)
-                
-                cursor.execute(sql, values)
-                reserva_db = cursor.fetchone()
-                
-                if reserva_db:
-                    return ReservaDTO(**reserva_db)
-                else:
-                    raise Exception(f"Reserva con el ID {id_reserva} no ha sido encontrado")
-        except Exception as e:
-            print(f"Ha ocurrido un error: {e}")
-            return None
+        return self._ejecutar_consulta(sql, values)
 
-    def obtener_reservas_por_usuario(self, id_usuario: int) -> list[ReservaDTO]:
-        conn = Conexion.obtener_conexion()
+    def obtener_por_id(self, id_reserva: int) -> Optional[ReservaDTO]:
+        """
+        Retrieve a reserva by its ID.
+        """
+        sql = "SELECT * FROM reservas WHERE id_reserva = %s;"
         
-        try:
-            with conn.cursor() as cursor:
-                sql = "SELECT * FROM reservas WHERE id_usuario = %s;"
-                values = (id_usuario,)
-                
-                cursor.execute(sql, values)
-                reservas_db = cursor.fetchall()
-                
-                if reservas_db:
-                    return [ReservaDTO(**reserva) for reserva in reservas_db]
-                else:
-                    raise Exception(f"No se encontraron reservas para el usuario con ID {id_usuario}")                
-        except Exception as e:
-            print(f"Ha ocurrido un error: {e}")
-            return []
+        return self._ejecutar_consulta(sql, (id_reserva,), fetch_one=True)
+
+    def obtener_por_usuario(self, id_usuario: int) -> List[ReservaDTO]:
+        """
+        Retrieve all reservas for a specific user.
+        """
+        sql = "SELECT * FROM reservas WHERE id_usuario = %s;"
+        
+        return self._ejecutar_consulta(sql, (id_usuario,))
+
+    def obtener_todos(self) -> List[ReservaDTO]:
+        """
+        Retrieve all reservas.
+        """
+        sql = "SELECT * FROM reservas;"
+        
+        return self._ejecutar_consulta(sql)
+
+    def actualizar(self, reserva: ReservaDTO) -> int:
+        """
+        Update an existing reserva record (permite cambiar paquete, usuario o estado).
+        """
+        sql = """
+            UPDATE reservas 
+            SET id_usuario = %s, id_paquete = %s, estado = %s 
+            WHERE id_reserva = %s;
+        """
+        values = (
+            reserva.id_usuario, 
+            reserva.id_paquete, 
+            reserva.estado, 
+            reserva.id_reserva
+        )
+        
+        return self._ejecutar_consulta(sql, values)
     
+    def actualizar_estado(self, id_reserva: int, nuevo_estado: str) -> int:
+        """
+        Specific method to update only the state of a reservation.
+        """
+        sql = "UPDATE reservas SET estado = %s WHERE id_reserva = %s;"
+        values = (nuevo_estado, id_reserva)
+        
+        return self._ejecutar_consulta(sql, values)
+
+    def eliminar(self, id_reserva: int) -> int:
+        """
+        Delete a reserva by its ID.
+        """
+        sql = "DELETE FROM reservas WHERE id_reserva = %s;"
+        
+        return self._ejecutar_consulta(sql, (id_reserva,))

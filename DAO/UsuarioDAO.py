@@ -1,9 +1,10 @@
 from DB.conexion import Conexion
 from DTO.UsuarioDTO import UsuarioDTO
 from typing import List
+from DAO.BaseDAO import BaseDAO
 
 # TODO: Implementar BaseDAO para heredar
-class UsuarioDAO:
+class UsuarioDAO(BaseDAO):
 	"""
 	DAO for Usuario entity
 	
@@ -15,83 +16,66 @@ class UsuarioDAO:
 	- eliminar(id_usuario: int) -> int
 	- actualizar(usuario: UsuarioDTO) -> int
 	"""
+	def __init__(self):
+		super().__init__(UsuarioDTO)
 
 	def crear(self, usuario: UsuarioDTO) -> int:
-		conn = Conexion.obtener_conexion()
+		"""
+		Create a ner usuario record in the database.
+		Args:
+			usuario (UsuarioDTO): The usuario data to insert.	
+		"""
+  
+		sql = "INSERT INTO usuario (nombre, email, rol, password_hash) VALUES (%s, %s, %s, %s);"
+		values = (usuario.nombre, usuario.email, usuario.rol, usuario.password_hash)
 
-		try:
-
-			with conn.cursor() as cursor:
-				sql = "INSERT INTO usuarios(id_usuario, nombre, email, rol, password_hash) VALUES (%s, %s, %s, %s, %s);"
-				values = (usuario.id_usuario, usuario.nombre, usuario.email, usuario.rol, usuario.password_hash)
-
-				cursor.execute(sql, values)
-
-				return cursor.lastrowid
-
-		except Exception as e:
-			print(f"Ha ocurrido un error: {e}")
-
-		return 0
+		return self.ejecutar_insert(sql, values, fetch_one=False)
 
 	def obtener_por_id(self, id_usuario: int) -> UsuarioDTO:
-		conn = Conexion.obtener_conexion()
+		"""
+		Retrieve a usuario by its ID.
+		Args:
+			id_usuario (int): The ID of the usuario to retrieve.
+		"""
+		sql = "SELECT * FROM usuarios WHERE id_usuario = %s;"
 
-		try:
-			with conn.cursor() as cursor:
-				sql = "SELECT * FROM usuarios WHERE id_usuario = %s;"
-				values = (id_usuario,)
-
-				cursor.execute(sql, values)
-
-				usuario_db = cursor.fetchone()
-
-				if usuario_db:
-					return UsuarioDTO(**usuario_db)
-				else:
-					raise Exception(f"Usuario con el ID {id_usuario} no ha sido encontrado")
-
-		except Exception as e:
-			print(f"Ha ocurrido un error: {e}")
-
-		return None
+		return self._ejecutar_consulta(sql, (id_usuario,), fetch_one=True)
 
 	def obtener_por_email(self, email: str) -> UsuarioDTO:
-		conn = Conexion.obtener_conexion()
+		"""
+		Retrieve a usuario by its email.
+		Args:
+			email (str): The email of the usuario to retrieve.
+		"""
+		sql = "SELECT * FROM usuarios WHERE email = %s;"
 
-		try:
-			with conn.cursor() as cursor:
-				sql = "SELECT * FROM usuarios WHERE email = %s;"
-				values = (email,)
-
-				cursor.execute(sql, values)
-
-				usuario_db = cursor.fetchone()
-
-				if usuario_db:
-					return UsuarioDTO(**usuario_db)
-				else:
-					raise Exception(f"Usuario con el email {email} no ha sido encontrado")
-		except Exception as e:
-			print(f"Ha ocurrido un error: {e}")
-
-		return None
+		return self._ejecutar_consulta(sql, (email,), fetch_one=True)
+		
 
 	def obtener_todos(self) -> List[UsuarioDTO]:
-		conn = Conexion.obtener_conexion()
+		"""
+		Retrieve all usuarios from the database.
+ 		"""
+		sql = "SELECT * FROM usuarios;"
 
-		try:
-			with conn.cursor() as cursor:
-				sql = "SELECT * FROM usuarios;"
-				usuarios_db = cursor.fetchall()
-
-				for user in usuarios_db:
-					print(user)
-		except Exception as e:
-			print(f"Ha ocurrido un error: {e}")
+		return self._ejecutar_consulta(sql, fetch_one=False)
 
 	def eliminar(self, id_usuario: int) -> List[UsuarioDTO]:
-		...
-	def actualizar(self):
-		...
-  
+		"""
+		Delete a usuario by its ID.
+		Args:
+			id_usuario (int): The ID of the usuario to delete.
+		"""
+		sql = "DELETE FROM usuarios WHERE id_usuario = %s;"
+
+		return self._ejecutar_consulta(sql, (id_usuario,), fetch_one=False)
+
+	def actualizar(self, usuario: UsuarioDTO) -> int:
+		"""
+		Update an existing usuario record in the database.
+		Args:
+			usuario (UsuarioDTO): The usuario data to update.
+		"""
+		sql = "UPDATE usuarios SET nombre = %s, email = %s, rol = %s, password_hash = %s WHERE id_usuario = %s;"
+		values = (usuario.nombre, usuario.email, usuario.rol, usuario.password_hash, usuario.id_usuario)
+		return self._ejecutar_consulta(sql, values, fetch_one=False)

@@ -1,34 +1,43 @@
-from DB.conexion import Conexion
-from DTO.PaqueteDestinoDTO import PaqueteDestinoDTO
+from typing import List
+from DAO.BaseDAO import BaseDAO 
+from DTO.PaqueteDestinoDTO import PaqueteDestinoDTO 
 
 
-# TODO: Implementar BaseDAO para heredar
-class PaqueteDestionDAO:
-    """Docstring for PaqueteDestinoDAO"""
-    # TODO implementar operaciones CRUD para PaqueteTuristicoDAO
+class PaqueteDestinoDAO(BaseDAO): 
+    """DAO for the relationship between Paquete and Destino (paquetes_destinos table)."""
     
-    def crear(self, paquete: PaqueteDestinoDTO) -> int:
+    def __init__(self):
+        super().__init__(PaqueteDestinoDTO) 
+
+    def crear(self, paquete_destino: PaqueteDestinoDTO) -> int:
         """
-        Implementar la creación de un nuevo paquete turístico en la base de datos.
-        
-        Parametros:
-        - paquete (PaqueteTuristicoDTO): Objeto que contiene los datos del paquete turístico a crear.
-        Retorna: 
-        - int: ID del paquete turístico creado o 0 en  caso de error.
-        
+        Creates a new record in paquetes_destinos. Returns the inserted ID.
         """
-        # TODO implementar metodo para crear paquete
-        conn = Conexion.obtener_conexion()
+        sql = "INSERT INTO paquetes_destinos(id_paquete, id_destino) VALUES(%s, %s);"
+        values = (paquete_destino.id_paquete, paquete_destino.id_destino)
+                
+        return self._ejecutar_consulta(sql, values)
         
-        try:
-            with conn.cursor() as cursor:
-                sql = "INSERT INTO paquetes_destinos(id_paquete, id_destino) VALUES(%s, %s);"
-                values = (paquete.id_paquete, paquete.id_destino)
-                
-                cursor.execute(sql, values)
-                
-                return cursor.lastrowid
-        except Exception as e:
-            print(f"Ha ocurrido un error: {e}")
-            conn.rollback()
-            return 0
+    def obtener_destinos_por_paquete(self, id_paquete: int) -> List[PaqueteDestinoDTO]:
+        """
+        Obtiene todos los IDs de destino asociados a un paquete.
+        """
+        sql = "SELECT id_paquete, id_destino FROM paquetes_destinos WHERE id_paquete = %s;"
+        
+        return self._ejecutar_consulta(sql, (id_paquete,), fetch_one=False)
+
+    def eliminar_por_paquete(self, id_paquete: int) -> int:
+        """
+        Elimina todos los destinos asociados a un paquete específico.
+        """
+        sql = "DELETE FROM paquetes_destinos WHERE id_paquete = %s;"
+        
+        return self._ejecutar_consulta(sql, (id_paquete,))
+    
+    def eliminar_vinculo(self, id_paquete: int, id_destino: int) -> int:
+        """
+        Elimina un vínculo específico entre un paquete y un destino.
+        """
+        sql = "DELETE FROM paquetes_destinos WHERE id_paquete = %s AND id_destino = %s;"
+        
+        return self._ejecutar_consulta(sql, (id_paquete, id_destino))

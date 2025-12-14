@@ -17,6 +17,13 @@ class BaseDAO:
         self.dto_clase = dto_clase
     
     def _ejecutar_consulta(self, sql: str, values: tuple = (), fetch_one: bool = False) -> Any:
+        """
+        Execute a SQL query and return results mapped to DTO instances.
+        Args:
+            sql (str): The SQL query to execute.
+            values (tuple): The values to substitute into the SQL query.
+            fetch_one (bool): Whether to fetch a single record or all records.
+        """
         conn = Conexion.obtener_conexion()
         
         # TODO determinar que operacion se esta realizando (SELECT, INSERT, UPDATE, DELETE)
@@ -31,12 +38,13 @@ class BaseDAO:
                     return cursor.lastrowid if sql.strip().upper().startswith("INSERT") else cursor.rowcount
                 elif sql.strip().upper().startswith("SELECT"):
                     if fetch_one:
-                        return cursor.fetchone()
+                        resultado_db = cursor.fetchone()
+                        return self.dto_clase(**resultado_db) if resultado_db else None 
                     else:
                         resultados_db = cursor.fetchall()
                         
                         # Map results to DTO instances
-                        return [self.dto_clase(**data) for data in resultados_db]
+                        return [self.dto_clase(**data) for data in resultados_db] if resultados_db else []
                 else:
                     raise Exception("Operación SQL inválida")
         except Exception as e:
