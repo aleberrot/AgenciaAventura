@@ -2,6 +2,7 @@ from DTO.PaqueteDTO import PaqueteDTO
 from typing import List
 from DB.conexion import Conexion
 
+# TODO: Implementar BaseDAO para heredar
 class PaqueteDAO:
     """docstring for PaqueteDAO"""
     def crear(self, paquete: PaqueteDTO) -> int:

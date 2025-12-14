@@ -1,6 +1,8 @@
 from DB.conexion import Conexion
 from DTO.PaqueteDestinoDTO import PaqueteDestinoDTO
 
+
+# TODO: Implementar BaseDAO para heredar
 class PaqueteDestionDAO:
     """Docstring for PaqueteDestinoDAO"""
     # TODO implementar operaciones CRUD para PaqueteTuristicoDAO

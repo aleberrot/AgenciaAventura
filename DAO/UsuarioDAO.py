@@ -2,9 +2,18 @@ from DB.conexion import Conexion
 from DTO.UsuarioDTO import UsuarioDTO
 from typing import List
 
+# TODO: Implementar BaseDAO para heredar
 class UsuarioDAO:
 	"""
-	docstring for UsuarioDAO
+	DAO for Usuario entity
+	
+	Methods:
+	- crear(usuario: UsuarioDTO) -> int
+	- obtener_por_id(id_usuario: int) -> UsuarioDTO
+	- obtener_por_email(email: str) -> UsuarioDTO
+	- obtener_todos() -> List[UsuarioDTO]
+	- eliminar(id_usuario: int) -> int
+	- actualizar(usuario: UsuarioDTO) -> int
 	"""
 
 	def crear(self, usuario: UsuarioDTO) -> int:

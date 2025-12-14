@@ -1,6 +1,8 @@
 from DB.conexion import Conexion
 from DTO.ReservaDTO import ReservaDTO
 
+
+# TODO: Implementar BaseDAO para heredar
 class ReservaDAO:
     """docstring for ReservaDAO"""
     

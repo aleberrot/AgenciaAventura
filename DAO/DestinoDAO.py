@@ -2,6 +2,7 @@ from DB.conexion import Conexion
 from DTO.DestinoDTO import DestinoDTO
 from typing import List
 
+# TODO: Implementar BaseDAO para heredar
 class DestinoDAO:
     """docstring for DestinoDAO"""
     def crear(self, destino: DestinoDTO) -> int:
