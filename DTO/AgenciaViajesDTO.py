@@ -10,13 +10,13 @@ class AgenciaDTO:
 		self.paquetes = paquetes
 		self.reservas = reservas
 
-		def gestionar_destinos():
-			...
+	def gestionar_destinos():
+		...
 
-		def gestionar_paquetes():
-			...
+	def gestionar_paquetes():
+		...
 
-		def gestionar_reservas():
-			...
+	def gestionar_reservas():
+		...
 			
 		

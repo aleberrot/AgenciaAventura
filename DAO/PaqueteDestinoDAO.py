@@ -1,8 +1,8 @@
 from DB.conexion import Conexion
 from DTO.PaqueteDestinoDTO import PaqueteDestinoDTO
 
-class PaqueteTuristicoDAO:
-    """Docstring for PaqueteTuristicoDAO"""
+class PaqueteDestionDAO:
+    """Docstring for PaqueteDestinoDAO"""
     # TODO implementar operaciones CRUD para PaqueteTuristicoDAO
     
     def crear(self, paquete: PaqueteDestinoDTO) -> int:
@@ -20,7 +20,12 @@ class PaqueteTuristicoDAO:
         
         try:
             with conn.cursor() as cursor:
-                sql = "INSERT INTO p"
+                sql = "INSERT INTO paquetes_destinos(id_paquete, id_destino) VALUES(%s, %s);"
+                values = (paquete.id_paquete, paquete.id_destino)
+                
+                cursor.execute(sql, values)
+                
+                return cursor.lastrowid
         except Exception as e:
             print(f"Ha ocurrido un error: {e}")
             conn.rollback()

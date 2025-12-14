@@ -5,8 +5,8 @@ from typing import List
 class UsuarioDAO:
 	"""
 	docstring for UsuarioDAO
- 	"""
-	
+	"""
+
 	def crear(self, usuario: UsuarioDTO) -> int:
 		conn = Conexion.obtener_conexion()
 
@@ -50,7 +50,7 @@ class UsuarioDAO:
 	def obtener_por_email(self, email: str) -> UsuarioDTO:
 		conn = Conexion.obtener_conexion()
 
-		try: 
+		try:
 			with conn.cursor() as cursor:
 				sql = "SELECT * FROM usuarios WHERE email = %s;"
 				values = (email,)
@@ -61,7 +61,7 @@ class UsuarioDAO:
 
 				if usuario_db:
 					return UsuarioDTO(**usuario_db)
-				else: 
+				else:
 					raise Exception(f"Usuario con el email {email} no ha sido encontrado")
 		except Exception as e:
 			print(f"Ha ocurrido un error: {e}")
@@ -80,3 +80,9 @@ class UsuarioDAO:
 					print(user)
 		except Exception as e:
 			print(f"Ha ocurrido un error: {e}")
+
+	def eliminar(self, id_usuario: int) -> List[UsuarioDTO]:
+		...
+	def actualizar(self):
+		...
+  

@@ -4,7 +4,7 @@ CREATE  TABLE usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
-    rol ENUM('ADMIN', 'EMPLEADO') NOT NULL,
+    rol ENUM('ADMIN', 'CLIENTE') NOT NULL,
     password_hash VARCHAR(255) NOT NULL
 );
 
