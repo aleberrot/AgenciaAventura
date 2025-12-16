@@ -53,6 +53,6 @@ class BaseDAO:
             # Raise the exception to be handled by the calling method
             raise e
         finally:
-            conn.cerrar_conexion()
+            Conexion.cerrar_conexion(conn)
         
                

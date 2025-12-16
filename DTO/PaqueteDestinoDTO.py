@@ -7,9 +7,9 @@ from DTO.DestinoDTO import DestinoDTO
 class PaqueteDestinoDTO:
 	"""docstring for PaqueteDestinoDTO"""
 	
-	def __init__(self, paquete: PaqueteDTO, destinos: List['DestinoDTO']):
-		self.paquete = paquete
-		self.destinos = destinos
+	def __init__(self, id_paquete: int, id_destino: int):
+		self.id_paquete = id_paquete
+		self.id_destino = id_destino
 
 	def calcular_precio() -> float:
 		...

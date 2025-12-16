@@ -1,5 +1,5 @@
 import pymysql
-from . import config
+import config
 
 class Conexion:
 	"""

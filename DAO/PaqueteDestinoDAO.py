@@ -2,7 +2,7 @@ from typing import List
 from DAO.BaseDAO import BaseDAO 
 from DTO.PaqueteDestinoDTO import PaqueteDestinoDTO 
 
-
+# TODO check logic in PaqueteDestinoDTO methods
 class PaqueteDestinoDAO(BaseDAO): 
     """DAO for the relationship between Paquete and Destino (paquetes_destinos table)."""
     
@@ -41,3 +41,5 @@ class PaqueteDestinoDAO(BaseDAO):
         sql = "DELETE FROM paquetes_destinos WHERE id_paquete = %s AND id_destino = %s;"
         
         return self._ejecutar_consulta(sql, (id_paquete, id_destino))
+
+    # TODO Implementar metodo para obtener destinos asociados a un paquete

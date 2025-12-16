@@ -23,13 +23,13 @@ class UsuarioDAO(BaseDAO):
 		"""
 		Create a ner usuario record in the database.
 		Args:
-			usuario (UsuarioDTO): The usuario data to insert.	
+			usuario (UsuarioDTO): The usuario data to insert.
 		"""
-  
-		sql = "INSERT INTO usuario (nombre, email, rol, password_hash) VALUES (%s, %s, %s, %s);"
+
+		sql = "INSERT INTO usuarios (nombre, email, rol, password_hash) VALUES (%s, %s, %s, %s);"
 		values = (usuario.nombre, usuario.email, usuario.rol, usuario.password_hash)
 
-		return self.ejecutar_insert(sql, values, fetch_one=False)
+		return self._ejecutar_consulta(sql, values, fetch_one=False)
 
 	def obtener_por_id(self, id_usuario: int) -> UsuarioDTO:
 		"""
@@ -50,12 +50,12 @@ class UsuarioDAO(BaseDAO):
 		sql = "SELECT * FROM usuarios WHERE email = %s;"
 
 		return self._ejecutar_consulta(sql, (email,), fetch_one=True)
-		
+
 
 	def obtener_todos(self) -> List[UsuarioDTO]:
 		"""
 		Retrieve all usuarios from the database.
- 		"""
+		"""
 		sql = "SELECT * FROM usuarios;"
 
 		return self._ejecutar_consulta(sql, fetch_one=False)
@@ -79,3 +79,5 @@ class UsuarioDAO(BaseDAO):
 		sql = "UPDATE usuarios SET nombre = %s, email = %s, rol = %s, password_hash = %s WHERE id_usuario = %s;"
 		values = (usuario.nombre, usuario.email, usuario.rol, usuario.password_hash, usuario.id_usuario)
 		return self._ejecutar_consulta(sql, values, fetch_one=False)
+
+	# TODO implementar funcion validar_rol(rol: str) -> bool

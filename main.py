@@ -1,12 +1,12 @@
 from UI.MenuPrincipal import MenuPrincipal
 
+app = MenuPrincipal()
 def main():
 	try:
-		MenuPrincipal.mostrar()
+		app.mostrar()
 
 	except Exception as e:
 		print(f"Ha ocurrido un error: {e}")
-
 	print("Gracias por usar!")
 
 
